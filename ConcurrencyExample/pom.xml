@@ -5,9 +5,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-  	<module>../ConcurrencyClient</module>
-  	<module>../ConcurrencyCommon</module>
-  	<module>../ConcurrencyServer</module>
+  	<module>ConcurrencyClient</module>
+  	<module>ConcurrencyCommon</module>
+  	<module>ConcurrencyServer</module>
   </modules>
   <dependencies>
   	<dependency>

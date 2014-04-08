@@ -4,7 +4,7 @@
     <groupId>rs.pstech</groupId>
     <artifactId>ConcurrencyExample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../ConcurrencyExample/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>ConcurrencyClient</artifactId>
   <dependencies>

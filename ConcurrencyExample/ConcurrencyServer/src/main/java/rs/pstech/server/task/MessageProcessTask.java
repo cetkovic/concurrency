@@ -21,9 +21,12 @@ public class MessageProcessTask implements Callable<Message>{
 		try {
 			inputStream = new ObjectInputStream(socket.getInputStream());
 			this.message = (Message)inputStream.readObject();
-		} catch (IOException|ClassNotFoundException e) {
-			log.error("Error while processing message",e);
-			e.printStackTrace();
+		} catch (IOException ioex) {
+			log.error("Error while processing message",ioex);
+			ioex.printStackTrace();
+		} catch (ClassNotFoundException ce){
+			log.error("Error while processing message",ce);
+			ce.printStackTrace();
 		}
 	}
 	
