@@ -1,14 +1,13 @@
 package rs.pstech.client.ui;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -24,15 +23,24 @@ public class MainFrame extends JFrame{
 	private static final Logger log = LoggerFactory.getLogger(MainFrame.class);
 
 	public static void main(String[] args) {
-		MigLayout layout = new MigLayout("fill", "[]", "[]");
+		MigLayout layout = new MigLayout("fill", "[][]", "[]");
 		MainFrame frame = new MainFrame();
 		frame.setLayout(layout);
-		frame.setSize(200, 200);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		frame.add(new JLabel("Test"));
+		frame.setSize(650, 400);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.add(new JLabel("Test"));
 		JButton button = new JButton("Send");
-		frame.add(button);
-		button.addActionListener(new ActionListener() {
+		frame.add(button, "wrap");
+
+        final MessageListingPanel sentMessages = new MessageListingPanel(20);
+        frame.add(sentMessages);
+
+        final MessageListingPanel receivedMessages = new MessageListingPanel(20);
+        frame.add(receivedMessages);
+
+
+        button.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ev) {
 				Message message = new Message(getRandomString());
@@ -44,13 +52,14 @@ public class MainFrame extends JFrame{
 					out = new ObjectOutputStream(socket.getOutputStream());
 					out.writeObject(message);
 					out.flush();
+                    sentMessages.addMessage(message);
 				} catch (IOException e) {
-					e.printStackTrace();
+					log.error("", e);
 				} finally {
 					try {
 						out.close();
 					} catch (IOException e) {
-						e.printStackTrace();
+                        log.error("", e);
 					}
 				}
 			}
