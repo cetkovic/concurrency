@@ -34,10 +34,10 @@ public class MessageProcessTask implements Callable<MessageResult>{
 	}
 	
 	public MessageResult call() throws Exception {
-		log.info("Starting to process message {}", message);
+		log.debug("Starting to process message {}", message);
 		long startTime = System.currentTimeMillis();
 		Thread.sleep(message.getMessageString().length() * 100);
-		log.info("End processing message {}", message);
+		log.debug("End processing message {}", message);
 		message.setProcessingTime(System.currentTimeMillis() - startTime);
 		return new MessageResult(message,socket);
 	}

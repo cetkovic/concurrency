@@ -33,11 +33,9 @@ public class InputProcessor implements Runnable {
 			
 				while (true){
 					try{
-						log.info("Message server started");
 						Socket socket = listener.accept();
-						log.info("Client connected");
 						messages.add(executor.submit(new MessageProcessTask(socket)));
-						log.info("Submitted message for processing");
+						log.debug("Submitted message for processing");
 					} catch (Exception e){
 						log.error("Error in processing in the InputProcessor",e);
 					}

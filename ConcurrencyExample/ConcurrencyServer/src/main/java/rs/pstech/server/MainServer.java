@@ -13,8 +13,6 @@ public class MainServer {
 	private static final Logger log = LoggerFactory.getLogger(MainServer.class);
 	
 	public static void main(String[] args) {
-		
-		
 		BlockingQueue<Future<MessageResult>> tasks = new LinkedBlockingQueue<Future<MessageResult>>();
 		
 		InputProcessor inputProcessor = new InputProcessor(tasks);
@@ -24,11 +22,6 @@ public class MainServer {
 		
 		log.info("Server started");
 	}
-	
-	
-	
-	
-	
 	
 }
 

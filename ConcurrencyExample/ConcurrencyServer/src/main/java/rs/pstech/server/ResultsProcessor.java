@@ -26,6 +26,7 @@ public class ResultsProcessor implements Runnable {
 				MessageResult result = tasks.take().get();
 				output = new ObjectOutputStream(result.getSocket().getOutputStream());
 				output.writeObject(result.getMessage());
+				log.info("Sent message {} back to client", result.getMessage().getMessageString());
 			} catch (Exception e){
 				log.error("Error processing results",e);
 			} finally {

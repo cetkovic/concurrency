@@ -78,9 +78,7 @@ public class MainFrame extends JFrame{
 				}
 			}
 		}).start();
-
         
-
         button.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ev) {
@@ -91,41 +89,46 @@ public class MainFrame extends JFrame{
 				for (int i = 0; i<numberOfMessages;i++){
 					Message message = new Message(getRandomString());
 					sentMessages.addMessage(message);
-					
-					messages.add(executor.submit(new Callable<Message>() {
-						public Message call() throws Exception {
-							Socket socket = null;
-							ObjectOutputStream out = null;
-							ObjectInputStream in = null;
-							try{
-								Message message = new Message(getRandomString());
-								log.info("Sending message to server {}", message);
-								socket = new Socket("localhost", 9898);
-								out = new ObjectOutputStream(socket.getOutputStream());
-								out.writeObject(message);
-								out.flush();
-								in = new ObjectInputStream(socket.getInputStream());
-			                    Message returnMessage = (Message)in.readObject();
-			                    log.info("Got back message {}-{}ms", message.getMessageString(), message.getProcessingTime());
-			                    receivedMessages.addMessage(returnMessage);
-			                    return returnMessage;
-							} catch (Exception e) {
-								log.error("",e);
-								return new Message("error");
-							} finally {
-								try {
-									socket.close();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						}
-					}));
+					messages.add(executor.submit(new MessageProcessorTask(message)));
 				}
 			}
 		});
 		
+	}
+	
+	private static class MessageProcessorTask implements Callable<Message>{
+		private Message message;
+		
+		public MessageProcessorTask (Message message){
+			this.message = message;
+		}
+		
+		public Message call() throws Exception {
+			Socket socket = null;
+			ObjectOutputStream out = null;
+			ObjectInputStream in = null;
+			try{
+				log.info("Sending message to server {}", message);
+				socket = new Socket("localhost", 9898);
+				out = new ObjectOutputStream(socket.getOutputStream());
+				out.writeObject(message);
+				out.flush();
+				in = new ObjectInputStream(socket.getInputStream());
+                Message returnMessage = (Message)in.readObject();
+                log.info("Got back message {}-{}ms", message.getMessageString(), message.getProcessingTime());
+                return returnMessage;
+			} catch (Exception e) {
+				log.error("",e);
+				return new Message("error");
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public static String getRandomString(){
