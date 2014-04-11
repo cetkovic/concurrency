@@ -32,23 +32,17 @@ public class InputProcessor implements Runnable {
 				listener = new ServerSocket(SERVER_LISTENER_PORT);
 			
 				while (true){
-					try{
-						Socket socket = listener.accept();
-						messages.add(executor.submit(new MessageProcessTask(socket)));
-						log.debug("Submitted message for processing");
-					} catch (Exception e){
-						log.error("Error in processing in the InputProcessor",e);
-					}
+					Socket socket = listener.accept();
+					messages.add(executor.submit(new MessageProcessTask(socket)));
+					log.debug("Submitted message for processing");
 				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (IOException e) {
+				log.error("Server error while listening for messages!");
 			} finally {
 				try {
 					listener.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Could not close Server socket listener");
 				}
 			}
 		}

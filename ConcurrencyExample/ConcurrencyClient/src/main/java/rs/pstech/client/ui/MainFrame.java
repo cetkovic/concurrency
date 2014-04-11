@@ -59,6 +59,7 @@ public class MainFrame extends JFrame{
         
         frame.setVisible(true);
         
+        // Thread for reading the responses, and putting them in the receivedMessages MessageListingPane
         new Thread(new Runnable() {
 			public void run() {
 				while(true){
@@ -88,9 +89,6 @@ public class MainFrame extends JFrame{
 			}
 		}
 	}
-		
-		
-	
 	
 	public static String getRandomString(){
 		int randomLength = RandomUtils.nextInt(5, 15);

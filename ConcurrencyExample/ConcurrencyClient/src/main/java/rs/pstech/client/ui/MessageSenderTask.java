@@ -26,19 +26,24 @@ public class MessageSenderTask implements Callable<Message>{
 		try{
 			log.info("Sending message to server {}", message);
 			long start = System.currentTimeMillis();
+			
+			//Send message out
 			socket = new Socket("localhost", 9898);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.writeObject(message);
 			out.flush();
+			
+			//Get response
 			in = new ObjectInputStream(socket.getInputStream());
             Message returnMessage = (Message)in.readObject();
+            
             log.info("Got back message {}-{}ms", message.getMessageString(), System.currentTimeMillis() - start);
             return returnMessage;
-		} catch (Exception e) {
-			log.error("",e);
-			return new Message("error");
+            
 		} finally {
 			try {
+				out.close();
+				in.close();
 				socket.close();
 			} catch (IOException e) {
 				log.error("Cannot close client socket");
