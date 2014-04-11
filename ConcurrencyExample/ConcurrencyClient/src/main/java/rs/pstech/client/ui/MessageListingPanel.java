@@ -10,7 +10,9 @@ import javax.swing.*;
  */
 public class MessageListingPanel extends JScrollPane {
 
-    private DefaultListModel<Message> dataModel;
+	private static final long serialVersionUID = -3626007009122995346L;
+	
+	private DefaultListModel<Message> dataModel;
     private JList<Message> messagesList;
 
     public MessageListingPanel(int numberOfVisibleRows) {
@@ -25,5 +27,9 @@ public class MessageListingPanel extends JScrollPane {
 
     public void addMessage(Message message) {
         dataModel.addElement(message);
+    }
+    
+    public void clear (){
+    	dataModel.clear();
     }
 }

@@ -10,17 +10,20 @@ import org.slf4j.LoggerFactory;
 
 import rs.pstech.common.Message;
 
-public class MessageProcessTask implements Callable<Message>{
+public class MessageProcessTask implements Callable<MessageResult>{
 	
 	private static final Logger log = LoggerFactory.getLogger(MessageProcessTask.class);
 	
 	private Message message;
+	private Socket socket;
 
 	public MessageProcessTask (Socket socket) {
+		this.socket = socket;
 		ObjectInputStream inputStream;
 		try {
 			inputStream = new ObjectInputStream(socket.getInputStream());
 			this.message = (Message)inputStream.readObject();
+			log.info("Received message {} for processing from client",message);
 		} catch (IOException ioex) {
 			log.error("Error while processing message",ioex);
 			ioex.printStackTrace();
@@ -30,13 +33,17 @@ public class MessageProcessTask implements Callable<Message>{
 		}
 	}
 	
-	public Message call() throws Exception {
-		log.info("Starting to process message {}", message);
+	public MessageResult call() throws Exception {
+		log.debug("Starting to process message {}", message);
 		long startTime = System.currentTimeMillis();
 		Thread.sleep(message.getMessageString().length() * 100);
-		log.info("End processing message {}", message);
+		log.debug("End processing message {}", message);
 		message.setProcessingTime(System.currentTimeMillis() - startTime);
-		return message;
+		return new MessageResult(message,socket);
 	}
+	
+	
 
 }
+
+
