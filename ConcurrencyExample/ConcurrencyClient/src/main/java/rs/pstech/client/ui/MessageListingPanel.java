@@ -25,7 +25,7 @@ public class MessageListingPanel extends JScrollPane {
         messagesList.setVisibleRowCount(numberOfVisibleRows);
     }
 
-    public void addMessage(Message message) {
+    public synchronized void addMessage(Message message) {
         dataModel.addElement(message);
     }
     

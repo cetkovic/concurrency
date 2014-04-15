@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
@@ -64,7 +65,13 @@ public class MainFrame extends JFrame{
 			public void run() {
 				while(true){
 					try {
-						receivedMessages.addMessage(messages.take().get());
+						final Message message = messages.take().get();
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								receivedMessages.addMessage(message);								
+							}
+						});
+						
 					} catch (Exception e) {
 						log.error("Error trying to take from the received messages queue",e);
 					}
