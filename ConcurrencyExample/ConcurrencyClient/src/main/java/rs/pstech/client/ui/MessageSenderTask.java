@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rs.pstech.common.Message;
+import rs.pstech.common.ServerProperties;
 
 public class MessageSenderTask implements Callable<Message>{
 	private static final Logger log = LoggerFactory.getLogger(MessageSenderTask.class);
@@ -28,7 +29,7 @@ public class MessageSenderTask implements Callable<Message>{
 			long start = System.currentTimeMillis();
 			
 			//Send message out
-			socket = new Socket("localhost", 9898);
+			socket = new Socket(ServerProperties.LOCALHOST.getURL(),ServerProperties.LOCALHOST.getPort());
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.writeObject(message);
 			out.flush();

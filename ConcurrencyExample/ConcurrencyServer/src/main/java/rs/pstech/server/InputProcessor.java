@@ -11,13 +11,12 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rs.pstech.common.ServerProperties;
 import rs.pstech.server.task.MessageProcessTask;
 import rs.pstech.server.task.MessageResult;
 
 public class InputProcessor implements Runnable {
 		private static final Logger log = LoggerFactory.getLogger(InputProcessor.class);
-		private static final int SERVER_LISTENER_PORT = 9898;
-		
 		private BlockingQueue<Future<MessageResult>> messages;
 
 		private ServerSocket listener;
@@ -29,7 +28,7 @@ public class InputProcessor implements Runnable {
 
 		public void run (){
 			try {
-				listener = new ServerSocket(SERVER_LISTENER_PORT);
+				listener = new ServerSocket(ServerProperties.LOCALHOST.getPort());
 			
 				while (true){
 					Socket socket = listener.accept();
