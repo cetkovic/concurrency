@@ -27,12 +27,12 @@ public class ResultProcessor implements Runnable {
 		log.info("Result processor thread ready to accept results...");
 		while(true){
 			try {
-				log.info("update0");
+				log.debug("update0");
 				final Message message = messages.take().get();
-				log.info("update1");
+				log.debug("update1");
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
-						log.info("update2");
+						log.debug("update2");
 						receivedMessages.addMessage(message);								
 					}
 				});
