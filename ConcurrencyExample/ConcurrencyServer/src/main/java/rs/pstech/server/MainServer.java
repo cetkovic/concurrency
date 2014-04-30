@@ -15,10 +15,8 @@ public class MainServer {
 	public static void main(String[] args) {
 		BlockingQueue<Future<MessageResult>> tasks = new LinkedBlockingQueue<Future<MessageResult>>();
 		
-		InputProcessor inputProcessor = new InputProcessor(tasks);
-		ResultsProcessor resultsProcessor = new ResultsProcessor(tasks);
-		new Thread(inputProcessor).start();
-		new Thread(resultsProcessor).start();
+		new Thread(new InputProcessor(tasks)).start();
+		new Thread(new ResultsProcessor(tasks)).start();
 		
 		log.info("Server started");
 	}

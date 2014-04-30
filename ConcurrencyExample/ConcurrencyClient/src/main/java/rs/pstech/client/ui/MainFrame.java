@@ -61,25 +61,12 @@ public class MainFrame extends JFrame{
         frame.setVisible(true);
         
         // Thread for reading the responses, and putting them in the receivedMessages MessageListingPane
-        new Thread(new Runnable() {
-			public void run() {
-				while(true){
-					try {
-						final Message message = messages.take().get();
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								receivedMessages.addMessage(message);								
-							}
-						});
-						
-					} catch (Exception e) {
-						log.error("Error trying to take from the received messages queue",e);
-					}
-				}
-			}
-		}).start();
-        
+        new Thread(new ResultProcessor(messages, receivedMessages)).start();
+		
+        // This action listener sends when you press the button
         button.addActionListener(new MyActionListener());
+        
+        log.info("Client set up and ready to run");
 		
 	}
 	
