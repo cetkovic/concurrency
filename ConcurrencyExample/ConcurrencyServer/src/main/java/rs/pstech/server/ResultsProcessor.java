@@ -1,8 +1,8 @@
 package rs.pstech.server;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
@@ -21,20 +21,18 @@ public class ResultsProcessor implements Runnable {
 	
 	public void run() {
 		while (true) {
-			ObjectOutputStream output = null;
-			try{
-				MessageResult result = tasks.take().get();
-				output = new ObjectOutputStream(result.getSocket().getOutputStream());
+			MessageResult result = null;
+			try {
+				result = tasks.take().get();
+			} catch (InterruptedException | ExecutionException e1) {
+				log.error("Error processing results", e1);
+			}
+			
+			try (ObjectOutputStream output = new ObjectOutputStream(result.getSocket().getOutputStream())){
 				output.writeObject(result.getMessage());
 				log.info("Sent message {} back to client", result.getMessage().getMessageString());
 			} catch (Exception e){
 				log.error("Error processing results",e);
-			} finally {
-				try {
-					output.close();
-				} catch (IOException e) {
-					log.error("Error closing socket!",e);
-				}
 			}
 		}
 	}

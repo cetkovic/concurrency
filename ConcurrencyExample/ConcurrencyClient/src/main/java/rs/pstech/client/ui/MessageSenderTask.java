@@ -37,7 +37,7 @@ public class MessageSenderTask implements Callable<Message>{
 			in = new ObjectInputStream(socket.getInputStream());
             Message returnMessage = (Message)in.readObject();
             
-            log.info("Got back message {}-{}ms", message.getMessageString(), System.currentTimeMillis() - start);
+            log.debug("Got back message {}-{}ms", message.getMessageString(), System.currentTimeMillis() - start);
             return returnMessage;
             
 		} finally {
